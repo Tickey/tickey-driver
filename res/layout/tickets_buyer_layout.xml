@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>   
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="fill_parent"
+    android:layout_height="56dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal">
+
+   	<com.tickey.app.view.custom.CircleNetworkImageView
+    	android:id="@+id/niv_buyers_avatar" 
+        android:layout_width="0dp"
+    	android:gravity="center"
+   		android:layout_height="match_parent"
+
+   		android:layout_weight="0.3"
+   		android:adjustViewBounds="true"
+   		android:layout_gravity="left"/>
+    
+    <TextView
+        android:id="@+id/tv_buyers_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:textSize="20sp"
+        android:gravity="left|center_vertical"
+        android:textColor="@color/background_blue"
+        android:lines="1"
+        android:text="sss">             
+    </TextView>
+    
+    <ImageView 
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:src="@drawable/green_check"/>
+    
+</LinearLayout>
+
+

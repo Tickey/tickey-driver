@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_green"
+    tools:context="com.tickey.app.screens.VehicleNumberScreen" >
+
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"/>
+   	<LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:layout_gravity="center">
+        
+		<LinearLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:gravity="center"
+		    
+		    android:background="@drawable/layout_rounded">
+	        <TextView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textSize="15sp"
+	            android:textColor="@color/background_blue"
+	            android:text="@string/vehicle"/>
+	        <EditText
+	            android:id="@+id/vehicleNumberET"
+	            android:imeOptions="flagNoExtractUi" 
+	            android:layout_width="300dp"
+	            android:padding="20dp"
+	            android:layout_height="wrap_content"/>
+	        <TextView
+	            android:id="@+id/doneTV"
+	            android:padding="10dip" 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:gravity="center"
+	            android:background="@drawable/layout_bottom_rounded"
+	            android:textSize="15sp"
+	            android:textColor="@color/white"
+	            android:text="@string/done"/>	        		    
+		</LinearLayout>
+        
+    </LinearLayout>
+    
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"/>
+
+</LinearLayout>

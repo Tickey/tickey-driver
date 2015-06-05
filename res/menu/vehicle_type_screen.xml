@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.tickey.VehicleTypeScreen" >
+
+	<item
+	    android:id="@+id/action_logOut"
+	    android:orderInCategory="100"
+	    app:showAsAction="always"
+	    android:icon="@drawable/logout_icon"
+	    android:title="@string/action_logOut"/>
+
+
+
+</menu>

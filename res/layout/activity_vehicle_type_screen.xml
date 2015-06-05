@@ -1,0 +1,33 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/my_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/secondary_super_light"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical" >
+
+        <include layout="@layout/app_bar" />
+		<com.tickey.app.view.custom.SlidingTabLayout 
+		    android:id="@+id/tabs"
+		    
+            android:layout_width="match_parent"
+        	android:layout_height="wrap_content"/>
+	   <android.support.v4.view.ViewPager
+	        android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+        	android:layout_height="0dp"
+        	android:layout_weight="1">
+	       
+	   </android.support.v4.view.ViewPager> 
+
+
+    </LinearLayout>    
+
+
+</android.support.v4.widget.DrawerLayout>

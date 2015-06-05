@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tickey.app.screens.TicketsScreen" >
+
+    <include layout="@layout/app_bar" />
+    
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent">
+
+	   	<fragment
+	   	    android:id="@+id/tickets_main_fragment"
+	   	    android:name="com.tickey.app.fragments.TicketsMainFragment"
+	   	    android:layout_width="0dp"
+	   	    android:layout_height="match_parent"
+	   	    android:layout_weight="0.7"
+	   	    tools:layout="@layout/fragment_tickets_main" />
+
+		<fragment
+		    android:id="@+id/tickets_buyers_fragment"
+		    android:name="com.tickey.app.fragments.TicketsBuyersFragment"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="0.3"
+		    tools:layout="@layout/fragment_tickets_buyers" />
+
+	</LinearLayout>
+
+
+</LinearLayout>
