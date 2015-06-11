@@ -81,5 +81,11 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="action_logOut">log out</string>
-
+    
+    
+    <string name="gcm_defaultSenderId">281158314481</string>
+	<string name="token_registration_error">Failed to log</string>
+	<string name="line_selection_error">Error while selecting line. Please try again or go back and enter new vehicle number</string>
+	<string name="no_buss_assigned">No bus assigned to you</string>
+	<string name="log_out_dialog">You will be logged out if proceed</string>
 </resources>

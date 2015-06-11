@@ -4,6 +4,8 @@
 	<color name="background_green">#b2d351</color>
 	<color name="background_blue">#2e4f5e</color>
 	
+	<color name="text_color_green">#a5cd38</color>
+	
 	<color name="green_transparent">#AA8DC63F</color>
     <color name="white_transparent">#55FFFFFF</color>
     <color name="white_transparent_background">#DDFFFFFF</color>

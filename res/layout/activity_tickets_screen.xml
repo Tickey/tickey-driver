@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.tickey.app.screens.TicketsScreen" >
+    tools:context="com.tickey.driver.screens.TicketsScreen" >
 
     <include layout="@layout/app_bar" />
     
@@ -13,18 +13,19 @@
 
 	   	<fragment
 	   	    android:id="@+id/tickets_main_fragment"
-	   	    android:name="com.tickey.app.fragments.TicketsMainFragment"
+	   	    android:name="com.tickey.driver.fragments.TicketsMainFragment"
 	   	    android:layout_width="0dp"
 	   	    android:layout_height="match_parent"
-	   	    android:layout_weight="0.7"
+	   	    android:layout_weight="0.6"
 	   	    tools:layout="@layout/fragment_tickets_main" />
 
 		<fragment
 		    android:id="@+id/tickets_buyers_fragment"
-		    android:name="com.tickey.app.fragments.TicketsBuyersFragment"
+		    android:name="com.tickey.driver.fragments.TicketsBuyersFragment"
 		    android:layout_width="0dp"
 		    android:layout_height="match_parent"
-		    android:layout_weight="0.3"
+		    android:layout_weight="0.4"
+		    android:layout_marginTop="1dp"
 		    tools:layout="@layout/fragment_tickets_buyers" />
 
 	</LinearLayout>

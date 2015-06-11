@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_green"
-    tools:context="com.tickey.app.screens.VehicleNumberScreen" >
+    tools:context="com.tickey.driver.screens.VehicleNumberScreen" >
 
     <View 
         android:layout_width="match_parent"
@@ -31,8 +31,10 @@
 	            android:text="@string/vehicle"/>
 	        <EditText
 	            android:id="@+id/vehicleNumberET"
-	            android:imeOptions="flagNoExtractUi" 
+  	      		android:imeOptions="flagNoExtractUi|actionDone"
 	            android:layout_width="300dp"
+	            android:maxLines="1"
+	            android:singleLine="true"
 	            android:padding="20dp"
 	            android:layout_height="wrap_content"/>
 	        <TextView

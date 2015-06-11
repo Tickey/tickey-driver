@@ -13,7 +13,7 @@
         android:orientation="vertical" >
 
         <include layout="@layout/app_bar" />
-		<com.tickey.app.view.custom.SlidingTabLayout 
+		<com.tickey.driver.view.custom.SlidingTabLayout 
 		    android:id="@+id/tabs"
 		    
             android:layout_width="match_parent"

@@ -3,9 +3,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
-    tools:context="com.tickey.app.screens.LoginScreen" >
+    tools:context="com.tickey.driver.screens.LoginScreen" >
     
-<fragment android:name="com.tickey.app.fragments.LoginFragment"
+<fragment 
+   		class="com.tickey.driver.fragments.LoginFragment"
         android:id="@+id/list"
         android:layout_weight="1"
         android:layout_width="0dp"

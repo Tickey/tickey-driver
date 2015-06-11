@@ -6,20 +6,19 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
-   	<com.tickey.app.view.custom.CircleNetworkImageView
+   	<com.tickey.driver.view.custom.CircleNetworkImageView
     	android:id="@+id/niv_buyers_avatar" 
         android:layout_width="0dp"
     	android:gravity="center"
    		android:layout_height="match_parent"
-
-   		android:layout_weight="0.3"
+   		android:layout_weight="0.15"
    		android:adjustViewBounds="true"
    		android:layout_gravity="left"/>
     
     <TextView
         android:id="@+id/tv_buyers_name"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:layout_weight="0.5"
         android:textSize="20sp"
         android:gravity="left|center_vertical"
@@ -29,9 +28,9 @@
     </TextView>
     
     <ImageView 
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.2"
+        android:layout_width="56dp"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY"
         android:src="@drawable/green_check"/>
     
 </LinearLayout>
