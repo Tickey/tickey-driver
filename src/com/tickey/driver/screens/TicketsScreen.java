@@ -301,8 +301,10 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-	    if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+	    if (mGoogleApiClient != null && mGoogleApiClient.isConnected() && mLocationRequest != null) {
 	        startUpdateLocation();
+        } else {
+        	buildLocationClient();
         }
 	    if(beaconTransmitter != null && beacon != null) {
 	    	try {
@@ -337,7 +339,7 @@ private GoogleApiClient buildLocationClient() {
 		// TODO Auto-generated method stub
       mCurrentLocation = location;
       sentLocationToServer(mCurrentLocation.getLongitude(), mCurrentLocation.getLatitude());
-//      MyLog.i(TAG, "Long " + mCurrentLocation.getLongitude() + " Lat " + mCurrentLocation.getLatitude());
+      MyLog.i(TAG, "Long " + mCurrentLocation.getLongitude() + " Lat " + mCurrentLocation.getLatitude());
 //      Toast.makeText(getApplicationContext(), "Lat - " + mCurrentLocation.getLatitude() + " Lng - " + mCurrentLocation.getLongitude(), Toast.LENGTH_SHORT).show();;
 	}
   

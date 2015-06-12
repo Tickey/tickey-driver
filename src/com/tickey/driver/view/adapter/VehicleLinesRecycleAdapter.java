@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -46,13 +49,22 @@ public class VehicleLinesRecycleAdapter extends RecyclerView.Adapter<VehicleLine
 	private Activity instance;
 	private String selectedLine;
 	private int selectedItem = -1;
+	private ProgressDialog loadingDialog;	
 	
 	public VehicleLinesRecycleAdapter(Context context, ArrayList<String> dataSet) {
 		inflater = LayoutInflater.from(context);
 		instance = (Activity) context;
 		mDataSet = dataSet;
 		selectedItems = new SparseBooleanArray();
-		
+		loadingDialog = new ProgressDialog(instance);
+		loadingDialog.setCancelable(false);
+		loadingDialog.setCanceledOnTouchOutside(false);
+		loadingDialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				// TODO Auto-generated method stub
+			}
+		});
 	}
 	
 	public class VehicleTypeViewHolder extends RecyclerView.ViewHolder{
@@ -118,6 +130,7 @@ public class VehicleLinesRecycleAdapter extends RecyclerView.Adapter<VehicleLine
 	}
 	
 	public void startTicketScreen() {
+		loadingDialog.show();
 		RequestQueue mRequestQueue = BaseApplication.getInstance().getRequestQueue();
 		
 		Type beaconReposneType = new TypeToken<ServerResponse<Bus>>() {}.getType();
@@ -136,7 +149,7 @@ public class VehicleLinesRecycleAdapter extends RecyclerView.Adapter<VehicleLine
 					public void onResponse(
 							ServerResponse<Bus> response) {
 						// TODO Auto-generated method stub
-						
+						loadingDialog.dismiss();						
 						Bus mBus = response.result;
 						
 						Intent mNextIntent = new Intent(instance, TicketsScreen.class);
@@ -159,6 +172,7 @@ public class VehicleLinesRecycleAdapter extends RecyclerView.Adapter<VehicleLine
 					public void onTickeyErrorResponse(VolleyError error) {
 						// TODO Auto-generated method stub
 						MyLog.e(TAG, ""+error.getMessage());
+						loadingDialog.dismiss();
 						Toast.makeText(instance, instance.getResources().getString(R.string.line_selection_error), Toast.LENGTH_SHORT).show();
 						mSelectedHolder.theView.setClickable(true);
 						mSelectedHolder.theView.setSelected(false);

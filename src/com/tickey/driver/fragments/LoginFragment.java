@@ -3,10 +3,13 @@ package com.tickey.driver.fragments;
 
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -51,6 +54,7 @@ public class LoginFragment extends Fragment{
 	
 	private GoogleCloudMessaging gcm;
 	private BroadcastReceiver mRegistrationBroadcastReceiver;
+	private ProgressDialog loadingDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,18 +75,18 @@ public class LoginFragment extends Fragment{
 		password = (TextView) content.findViewById(R.id.passwordET);
 //		userName.setText("nes"); password.setText("nes");
 		
-		password.setOnEditorActionListener(new OnEditorActionListener() {
-			
+		loadingDialog = new ProgressDialog(getActivity());
+		loadingDialog.setCancelable(false);
+		loadingDialog.setCanceledOnTouchOutside(false);
+		loadingDialog.setOnCancelListener(new OnCancelListener() {
 			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		        boolean handled = false;
-		        if (actionId == EditorInfo.IME_ACTION_SEND) {
-		            loginButton.callOnClick();
-		            handled = true;
-		        }
-		        return handled;
+			public void onCancel(DialogInterface dialog) {
+				// TODO Auto-generated method stub
 			}
 		});
+		loadingDialog.setMessage("Loading...");
+
+
         
 		loginButton = (Button) content.findViewById(R.id.loginBtn);
 		loginButton.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +97,7 @@ public class LoginFragment extends Fragment{
 
 		        if (checkPlayServices()) {
 		            // Start IntentService to register this application with GCM.
+		        	loadingDialog.show();
 		            Intent intent = new Intent(getActivity(), RegistrationIntentService.class);
 		            getActivity().startService(intent);
 		            
@@ -100,6 +105,19 @@ public class LoginFragment extends Fragment{
 					MyLog.i(TAG, "No valid Google Play Services APK found.");
 				}
 
+			}
+		});
+		
+		password.setOnEditorActionListener(new OnEditorActionListener() {
+			
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		        boolean handled = false;
+		        if (actionId == EditorInfo.IME_ACTION_SEND) {
+		            loginButton.callOnClick();
+		            handled = true;
+		        }
+		        return handled;
 			}
 		});
 		
@@ -126,7 +144,7 @@ public class LoginFragment extends Fragment{
 
 	
 	private void initializeLogin(String registerId) {
-
+		
 		new Authorization().login(getActivity().getApplicationContext(), userName.getText().toString(), password.getText().toString(), registerId,
 				Hardware.getDeviceName(), Hardware
 						.getDeviceId(getActivity().getApplication()), mAuthCallbacks);
@@ -165,7 +183,7 @@ public class LoginFragment extends Fragment{
 	}
 
 	private void notLoggedIn() {
-
+		loadingDialog.dismiss();
 		mNextIntent = new Intent(getActivity().getApplicationContext(), LoginScreen.class);
 //
 //		splashScreen();
