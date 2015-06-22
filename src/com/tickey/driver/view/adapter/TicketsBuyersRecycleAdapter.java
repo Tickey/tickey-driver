@@ -9,14 +9,16 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.tickey.driver.R;
 import com.tickey.driver.common.BaseApplication;
 import com.tickey.driver.data.model.User;
+import com.tickey.driver.utility.MyLog;
 import com.tickey.driver.view.custom.CircleNetworkImageView;
 
 public class TicketsBuyersRecycleAdapter extends RecyclerView.Adapter<TicketsBuyersRecycleAdapter.TicketsBuyerViewHolder>{
@@ -47,13 +49,15 @@ public class TicketsBuyersRecycleAdapter extends RecyclerView.Adapter<TicketsBuy
 		public CircleNetworkImageView buyerAvatar;
 		public View theView;
 		public int position;
+		public ImageView emptyList;
 		
 		public TicketsBuyerViewHolder(View itemView) {
 			super(itemView);
-			
-			buyerAvatar = (CircleNetworkImageView) itemView.findViewById(R.id.niv_buyers_avatar);
-			
-			mTextView = (TextView) itemView.findViewById(R.id.tv_buyers_name);
+//			if(mDataSet.size() > 0) {
+				buyerAvatar = (CircleNetworkImageView) itemView.findViewById(R.id.niv_buyers_avatar);
+				
+				mTextView = (TextView) itemView.findViewById(R.id.tv_buyers_name);
+//			}
 		}
 
 		
@@ -61,29 +65,28 @@ public class TicketsBuyersRecycleAdapter extends RecyclerView.Adapter<TicketsBuy
 
 	
 	
-	@Override
-	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return super.getItemId(position);
-	}
 
 	@Override
 	public int getItemCount() {
 		// TODO Auto-generated method stub
 		return mDataSet.size();
+		
 	}
 
 	@Override
 	public void onBindViewHolder(TicketsBuyerViewHolder holder, int position) {
 		// TODO Auto-generated method stub
-		User buyer = mDataSet.get(position);
-		holder.position = position;
-		holder.mTextView.setText(buyer.fullName);
-		if(buyer.imageUrl != null && !buyer.imageUrl.equals("")) {
-			holder.buyerAvatar.setImageUrl(buyer.imageUrl, mImageLoader);
-		} else {
-			holder.buyerAvatar.setImageUrl("https://31.media.tumblr.com/avatar_48fd47f91171_128.png", mImageLoader);
-		}
+//		if(mDataSet.size() > 0) {
+			User buyer = mDataSet.get(position);
+			holder.position = position;
+			holder.mTextView.setText(buyer.fullName);
+			if(buyer.imageUrl != null && !buyer.imageUrl.equals("")) {
+				holder.buyerAvatar.setImageUrl(buyer.imageUrl, mImageLoader);
+			} else {
+				holder.buyerAvatar.setImageUrl("https://31.media.tumblr.com/avatar_48fd47f91171_128.png", mImageLoader);
+			}
+//		} 
+
 		
 		
 	}
@@ -91,18 +94,28 @@ public class TicketsBuyersRecycleAdapter extends RecyclerView.Adapter<TicketsBuy
 	@Override
 	public TicketsBuyerViewHolder onCreateViewHolder(ViewGroup parent, int position) {
 		// TODO Auto-generated method stub
-		View layout = inflater.inflate(R.layout.tickets_buyer_layout, parent, false);
-		
-		layout.setOnClickListener(new View.OnClickListener() {
+		MyLog.i("tag", "parent heigth " + parent.getMeasuredHeight() / 4);
+		TicketsBuyerViewHolder holder;
+//		if(mDataSet.size() > 0) {
+			View layout = inflater.inflate(R.layout.tickets_buyer_layout, parent, false);
 			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+			layout.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
 
-			}
-		});
-		
-		TicketsBuyerViewHolder holder = new TicketsBuyerViewHolder(layout);
+				}
+			});
+			
+			holder = new TicketsBuyerViewHolder(layout);
+//		} else {
+//			View layout = inflater.inflate(R.layout.empty_byers_list, parent, false);
+//			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+//			params.setMargins(0, parent.getMeasuredHeight() / 4, 0, 0);
+//			layout.setLayoutParams(params);
+//			holder = new TicketsBuyerViewHolder(layout);
+//		}
 
 		return holder;
 	}

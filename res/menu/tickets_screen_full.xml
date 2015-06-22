@@ -1,0 +1,46 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.tickey.TicketsScreen" >
+	<item
+	    android:id="@+id/phone_count"
+	    android:orderInCategory="1"
+	    app:showAsAction="always"
+	    android:title="17"/>    
+	<item
+	    android:id="@+id/ic_phone"
+	    android:orderInCategory="2"
+	    app:showAsAction="always"
+	    android:icon="@drawable/ic_phone"
+	    android:title=""/>      
+	<item
+	    android:id="@+id/card_count"
+	    android:orderInCategory="3"
+	    app:showAsAction="always"
+	    android:title="11"/>    
+	<item
+	    android:id="@+id/ic_card"
+	    android:orderInCategory="4"
+	    app:showAsAction="always"
+	    android:icon="@drawable/ic_card"
+	    android:title=""/>    
+	<item
+	    android:id="@+id/tickets_count"
+	    android:orderInCategory="5"
+	    app:showAsAction="always"
+	    android:title="22"/>    
+	<item
+	    android:id="@+id/ic_ticket"
+	    android:orderInCategory="6"
+	    app:showAsAction="always"
+	    android:icon="@drawable/ic_ticket"
+	    android:title=""/>
+	<item
+	    android:id="@+id/action_logOut"
+	    android:orderInCategory="100"
+	    app:showAsAction="always"
+	    android:icon="@drawable/logout_icon"
+	    android:title="@string/action_logOut"/>
+	
+
+</menu>

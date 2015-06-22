@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.tickey.driver.R;
@@ -31,6 +32,7 @@ public class TicketsBuyersFragment extends Fragment{
     private RecyclerView.LayoutManager mLayoutManager;
     private BroadcastReceiver mTicketsBuyingReceiver;
     private ArrayList<User> mBuyersDataSet;
+    private LinearLayout layout;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,16 @@ public class TicketsBuyersFragment extends Fragment{
 			public void onReceive(Context context, Intent intent) {
 				// TODO Auto-generated method stub
 			
-					
+
 				User newUser = new Gson().fromJson(intent.getStringExtra("buyerObject"), User.class);
 				if(newUser != null) {
+					if(mBuyersDataSet.size() == 0) {
+						mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+						layout.removeAllViews();
+						layout.addView(mRecyclerView);
+					}
 					mBuyersDataSet.add(0, newUser);
+					mRecyclerView.invalidate();
 					mAdapter.notifyItemInserted(0);
 					
 //					mAdapter.notifyDataSetChanged();
@@ -65,11 +73,20 @@ public class TicketsBuyersFragment extends Fragment{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		
-		View layout = inflater.inflate(R.layout.fragment_tickets_buyers, container, false);
+		layout = (LinearLayout) inflater.inflate(R.layout.fragment_tickets_buyers, container, false);
 		
 		mRecyclerView = (RecyclerView) layout.findViewById(R.id.rv_ticketsBuyers);
 		mRecyclerView.setHasFixedSize(true);
-		mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+		LinearLayout emptyList = (LinearLayout) inflater.inflate(R.layout.empty_byers_list, layout, false);
+		
+		if(mBuyersDataSet.size() == 0) {
+			layout.removeAllViews();
+//			mRecyclerView.setVisibility(View.INVISIBLE);
+			layout.addView(emptyList);
+		}
+	
+		
+
 		
 		mLayoutManager = new LinearLayoutManager(getActivity());
 		mAdapter = new TicketsBuyersRecycleAdapter(getActivity(), mBuyersDataSet);

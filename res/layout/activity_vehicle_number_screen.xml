@@ -35,6 +35,7 @@
 	            android:layout_width="300dp"
 	            android:maxLines="1"
 	            android:singleLine="true"
+	            android:gravity="center"
 	            android:padding="20dp"
 	            android:layout_height="wrap_content"/>
 	        <TextView

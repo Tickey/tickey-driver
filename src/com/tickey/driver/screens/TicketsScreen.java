@@ -132,7 +132,7 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 		        .setId2("1")
 		        .setId3(meEmployee.busAssigned.beaconId)
 		        .setManufacturer(0x004C) // Apple.  Change this for other beacon layouts
-		        .setTxPower(-59)
+		        .setTxPower(-75)
 		        .setDataFields(Arrays.asList(new Long[] {0l})) // Remove this for beacon layouts without d: fields
 		        .build();
 				
@@ -145,6 +145,8 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 			}
 		};
 		
+	    buildGoogleApiClient();
+	    
 		new NNAsyncTask(this, false) {
 			
 			@Override
@@ -181,7 +183,6 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
         builder.setMessage(getString(R.string.log_out_dialog))
                .setPositiveButton(getString(R.string.action_logOut), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
-                       // FIRE ZE MISSILES!
                 	   Authorization.logout(TicketsScreen.this);
                    }
                })
@@ -272,15 +273,14 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 	}
 	
     private void startUpdateLocation() {
-
-
+    	
       LocationServices.FusedLocationApi.requestLocationUpdates(
-      		mGoogleApiClient, mLocationRequest, this);
-      MyLog.d(TAG, "Location update started");
-  }
+        		mGoogleApiClient, mLocationRequest, this);
+	  MyLog.d(TAG, "Location update started");
+    }
     
     protected void stopLocationUpdates() {
-    	if(mGoogleApiClient != null) {
+    	if(mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     mGoogleApiClient, this);
     	}
@@ -319,7 +319,7 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 private GoogleApiClient buildLocationClient() {
       if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) return mGoogleApiClient;
       
-      buildGoogleApiClient();
+
 
 
 //      try {
