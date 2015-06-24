@@ -7,7 +7,7 @@
 	android:background="?android:attr/selectableItemBackground"	  
     tools:context="com.tickey.driver.screens.TicketsScreen" >
 
-	<LinearLayout 
+	<LinearLayout
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical">
@@ -17,11 +17,28 @@
 	        android:layout_height="250dp"
 	        android:layout_gravity="center"
 	        />
+		<LinearLayout
+       	    android:visibility="invisible" 
+		    android:layout_marginTop="-24dp"
+		    android:id="@+id/borderView"
+		    android:orientation="horizontal"
+		    android:layout_height="1dp" 
+		    android:layout_width="250dp">
+		    <View 
+		        android:layout_width="56dp"
+		        android:layout_height="1dp"/>
+		    <View 
+		        android:layout_width="138dp"
+		        android:layout_height="1dp"
+		        android:background="@android:drawable/divider_horizontal_bright"/>
+		    <View 
+		        android:layout_width="56dp"
+		        android:layout_height="1dp"/>	    	    
+		</LinearLayout>	    
 	    <TextView
 	        android:id="@+id/last_buyer_name" 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="-26dp"
 	        android:textSize="20sp"
 	        android:textColor="@color/background_blue"
 	        android:gravity="center"

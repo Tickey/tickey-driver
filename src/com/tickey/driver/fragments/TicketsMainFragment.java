@@ -29,7 +29,7 @@ public class TicketsMainFragment extends Fragment{
 	private TextView lastBuyerName;
     private BroadcastReceiver mTicketsBuyingReceiver;
     private ImageLoader mImageLoader;
-    
+    private View borderView;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -45,7 +45,8 @@ public class TicketsMainFragment extends Fragment{
 		View content = inflater.inflate(R.layout.fragment_tickets_main_new, container, false);
 		
 		mImageLoader = BaseApplication.getInstance().getImageLoader();
-
+		borderView = content.findViewById(R.id.borderView);
+		
 		lastBuyerAvatar = (CircleNetworkImageView) content.findViewById(R.id.last_buyer_avatar);
 		lastBuyerName = (TextView) content.findViewById(R.id.last_buyer_name);
 		mTicketsBuyingReceiver = new BroadcastReceiver() {
@@ -57,6 +58,7 @@ public class TicketsMainFragment extends Fragment{
 				if(newUser != null) {
 					lastBuyerAvatar.setImageUrl(newUser.imageUrl, mImageLoader, true);
 					lastBuyerName.setText(newUser.fullName);
+					borderView.setVisibility(View.VISIBLE);
 					((TicketsScreen) (getActivity())).commitPhoneSale();
 //					lastBuyerAvatar.setImageUrl("https://31.media.tumblr.com/avatar_48fd47f91171_128.png", mImageLoader, true);
 //					lastBuyerAvatar.setImageUrl("https://scontent-ams3-1.xx.fbcdn.net/hphotos-xpa1/t31.0-8/1401310_808669665847064_7901199621549789934_o.jpg", mImageLoader, true);

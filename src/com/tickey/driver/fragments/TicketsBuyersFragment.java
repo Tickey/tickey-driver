@@ -28,6 +28,7 @@ public class TicketsBuyersFragment extends Fragment{
 
 	private static final String TAG = TicketsBuyersFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
+    private View borderView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private BroadcastReceiver mTicketsBuyingReceiver;
@@ -52,10 +53,11 @@ public class TicketsBuyersFragment extends Fragment{
 					if(mBuyersDataSet.size() == 0) {
 						mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 						layout.removeAllViews();
+						layout.addView(borderView);
 						layout.addView(mRecyclerView);
 					}
 					mBuyersDataSet.add(0, newUser);
-					mRecyclerView.invalidate();
+
 					mAdapter.notifyItemInserted(0);
 					
 //					mAdapter.notifyDataSetChanged();
@@ -77,11 +79,15 @@ public class TicketsBuyersFragment extends Fragment{
 		
 		mRecyclerView = (RecyclerView) layout.findViewById(R.id.rv_ticketsBuyers);
 		mRecyclerView.setHasFixedSize(true);
+		
+		borderView = layout.findViewById(R.id.borderView);
+		
 		LinearLayout emptyList = (LinearLayout) inflater.inflate(R.layout.empty_byers_list, layout, false);
 		
 		if(mBuyersDataSet.size() == 0) {
 			layout.removeAllViews();
 //			mRecyclerView.setVisibility(View.INVISIBLE);
+			layout.addView(borderView);
 			layout.addView(emptyList);
 		}
 	

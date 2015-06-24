@@ -2,13 +2,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="com.tickey.driver.screens.TicketsScreen" >
+    
+	<LinearLayout
+	    android:id="@+id/borderView"
+	    android:orientation="vertical"
+	    android:layout_height="fill_parent" 
+	    android:layout_width="1dp">
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="20dp"/>
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_marginBottom="20dp"
+	        android:background="@android:drawable/divider_horizontal_bright"/>
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="20dp"/>	    	    
+	</LinearLayout>
+	
 
 	 <android.support.v7.widget.RecyclerView
+		
 	    android:id="@+id/rv_ticketsBuyers"
 	    android:scrollbars="vertical"
+	    android:layout_marginLeft="1dp"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"/>
-
 </LinearLayout>
