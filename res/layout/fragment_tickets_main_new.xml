@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:gravity="center"
+	android:background="?android:attr/selectableItemBackground"	  
+    tools:context="com.tickey.driver.screens.TicketsScreen" >
+
+	<LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical">
+	    <com.tickey.driver.view.custom.CircleNetworkImageView
+	        android:id="@+id/last_buyer_avatar" 
+	        android:layout_width="250dp"
+	        android:layout_height="250dp"
+	        android:layout_gravity="center"
+	        />
+	    <TextView
+	        android:id="@+id/last_buyer_name" 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="-26dp"
+	        android:textSize="20sp"
+	        android:textColor="@color/background_blue"
+	        android:gravity="center"
+	        android:text=""
+	        />    
+	</LinearLayout>
+
+</LinearLayout>

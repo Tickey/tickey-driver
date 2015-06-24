@@ -3,21 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.tickey.TicketsScreen" >
 	<item
-	    android:id="@+id/phone_count"
+	    android:id="@+id/phone_sell" 
 	    android:orderInCategory="1"
 	    app:showAsAction="always"
-	    android:title="17"/>    
+	    app:actionLayout="@layout/action_bar_item_text_at_right"/>
 	<item
-	    android:id="@+id/ic_phone"
+	    android:id="@+id/bus_info"
 	    android:orderInCategory="2"
-	    app:showAsAction="always"
-	    android:icon="@drawable/ic_phone"
-	    android:title=""/>      
+	    
+	    app:showAsAction="always|withText"
+   	    android:title=""
+	    android:icon="@drawable/bus"/>      
 	<item
 	    android:id="@+id/action_logOut"
 	    android:orderInCategory="100"
 	    app:showAsAction="always"
 	    android:icon="@drawable/logout_icon"
+	    
 	    android:title="@string/action_logOut"/>
 	
 

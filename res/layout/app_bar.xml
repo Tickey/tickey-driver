@@ -12,10 +12,10 @@
 
     
 	<com.tickey.driver.view.custom.CircleNetworkImageView
-	    	android:id="@+id/profileAvatar" 
-	        android:layout_width="40dp"
-       		android:gravity="center"
-    		android:layout_height="match_parent" />
+		android:id="@+id/profileAvatar" 
+	    android:layout_width="40dp"
+		android:gravity="center"
+		android:layout_height="match_parent" />
 	<TextView 
 		android:id="@+id/tv_driverNmae" 
    		android:layout_width="wrap_content"

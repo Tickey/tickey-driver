@@ -3,6 +3,8 @@ package com.tickey.driver.view.custom;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
@@ -11,11 +13,16 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.tickey.driver.R;
+import com.tickey.driver.utility.MyLog;
  
 public class CircleNetworkImageView extends NetworkImageView {
 	Context mContext;
- 
+	boolean drawTick;
+	Bitmap tick;
+	
 	public CircleNetworkImageView(Context context) {
 		super(context);
 		mContext = context;
@@ -65,11 +72,35 @@ public class CircleNetworkImageView extends NetworkImageView {
 	    
 	    canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
 	            bitmap.getWidth() / 2, paint);
-	    
+
+
+
+
 	    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
 	    canvas.drawBitmap(bitmap, rect, rect, paint);
 	    //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
 	    //return _bmp;
+	    if(drawTick) {
+//	    	if(tick == null) {
+//	    		Options options = new BitmapFactory.Options();
+//	    	    options.inScaled = false;
+//	    		tick = BitmapFactory.decodeResource(mContext.getResources(),
+//	                    R.drawable.tick, options);
+//	    	}
+//		    float params = (bitmap.getWidth() / 4) * 3;
+//		    MyLog.i("CyrcleImageView", "Drawning tick with params: " + this.getMeasuredHeight() );
+//		    Paint tickPaint = new Paint();
+//		    paint.setAntiAlias(true);
+//		    paint.setFilterBitmap(true);
+//		    paint.setDither(true);
+//		    Rect rectTickStart = new Rect(0, 0, tick.getWidth(), tick.getHeight());
+//		    int bmW = (bitmap.getWidth() / 3);
+//		    int bmH = (bitmap.getHeight() / 3);
+//		    int bm = (bmW < bmH ) ? bmW : bmH;
+//		    Rect rectTickEnd = new Rect(bmW * 2 ,bmH * 2, bmW * 2 + bm, bmH * 2 + bm ) ;
+//		    canvas.drawBitmap(tick, null, rectTickEnd, null);
+
+	    }
 	    return output;
 	    
 //		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
@@ -95,4 +126,9 @@ public class CircleNetworkImageView extends NetworkImageView {
 //		return output;
 	}
  
+	
+    public void setImageUrl(String url, ImageLoader imageLoader, boolean drawTick) {
+    	this.drawTick = drawTick;
+    	setImageUrl(url, imageLoader);
+    }
 }

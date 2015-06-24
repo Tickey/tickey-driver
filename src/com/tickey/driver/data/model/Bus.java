@@ -15,4 +15,7 @@ public class Bus {
 	
 	@SerializedName("brand")
 	public String brand;
+	
+	@SerializedName("regNumber")
+	public String regNumber;
 }

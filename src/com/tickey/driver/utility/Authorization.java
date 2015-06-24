@@ -30,6 +30,7 @@ public class Authorization {
 	protected static final String TAG = Authorization.class.getSimpleName();
 
 	public static final String USER_TOKEN = "token";
+	public static final String PHONE_SALES_COUNT = "phone_sales_count";
 	public static final String KEY_FB_ACCESS_TOKEN = "access_token";
 	public static final String KEY_AUTH_HEADER = "Authorization";
 	public static final String KEY_USERNAME = "username";
@@ -80,6 +81,7 @@ public class Authorization {
 		Authorization.userAuthenticationToken = userAuthenticationToken;
 		mSharedPreferences.edit()
 				.putString(USER_TOKEN, userAuthenticationToken).commit();
+		mSharedPreferences.edit().putInt(PHONE_SALES_COUNT, 0).commit();
 	}
 
 	public void facebookLogin(Context context, String accessToken,
@@ -190,6 +192,7 @@ public class Authorization {
 	public static void invalidateLoginCredentials(Context context) {
 
 		mSharedPreferences.edit().remove(USER_TOKEN).commit();
+		mSharedPreferences.edit().remove(PHONE_SALES_COUNT).commit();
 		userAuthenticationToken = null;
 	}
 
@@ -217,5 +220,16 @@ public class Authorization {
 				+ getUserAuthenticationToken(context));
 
 		return map;
+	}
+	
+	public static int incrementPhoneSales() {
+		int phonesSalesCount = mSharedPreferences.getInt(PHONE_SALES_COUNT, 0);
+		phonesSalesCount++;
+		mSharedPreferences.edit().putInt(PHONE_SALES_COUNT, phonesSalesCount).commit();
+		return phonesSalesCount;
+	}
+	
+	public static int getSessionPhoneSales() {
+		return mSharedPreferences.getInt(PHONE_SALES_COUNT, 0);
 	}
 }

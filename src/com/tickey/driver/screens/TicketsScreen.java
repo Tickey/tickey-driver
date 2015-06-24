@@ -16,12 +16,14 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -31,6 +33,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -62,6 +65,8 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 	private CircleNetworkImageView mCircleImageView;
 	private TextView mDriverName;
 	
+	private TextView mPhoneSalesCount;
+	
 	private Employee meEmployee; 
 	
 	private ImageLoader mImageLoader = BaseApplication.getInstance()
@@ -82,15 +87,18 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 	
 	private NNAsyncTask startBeacon;
 	private Dialog dialog;
+	private MenuItem mBusInfo;
+	private Handler mHandler;
+	private Runnable actionBarBusInfoAdding;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_tickets_screen);
-		
+		hideSystemUI();
 		mRequestQueue = BaseApplication.getInstance().getRequestQueue();
-		
+		mHandler = new Handler();
 		mToolbar = (Toolbar) findViewById(R.id.toolbar);
 		if (mToolbar != null) {
 			setSupportActionBar(mToolbar);
@@ -131,7 +139,7 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 		        .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
 		        .setId2("1")
 		        .setId3(meEmployee.busAssigned.beaconId)
-		        .setManufacturer(0x004C) // Apple.  Change this for other beacon layouts
+		        .setManufacturer(0x01FD) // Apple.  Change this for other beacon layouts
 		        .setTxPower(-75)
 		        .setDataFields(Arrays.asList(new Long[] {0l})) // Remove this for beacon layouts without d: fields
 		        .build();
@@ -177,6 +185,8 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 		
 		startBeacon.execute();
 		
+		
+
 	
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -201,6 +211,27 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.tickets_screen, menu);
+		MenuItem mItem = menu.findItem(R.id.phone_sell);
+		mPhoneSalesCount = (TextView) mItem.getActionView().findViewById(R.id.phone_sales_count);
+		mPhoneSalesCount.setText(""+Authorization.getSessionPhoneSales());
+
+		
+		mBusInfo = menu.findItem(R.id.bus_info);
+		
+		actionBarBusInfoAdding  = new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if(meEmployee != null) {
+					mBusInfo.setTitle("  " + meEmployee.busAssigned.line + " | " + meEmployee.busAssigned.regNumber);
+				} else {
+					mHandler.postDelayed(actionBarBusInfoAdding, 1000);
+				}
+			}
+		};
+		mHandler.post(actionBarBusInfoAdding);
+
 		return true;
 	}
 
@@ -261,6 +292,9 @@ public class TicketsScreen extends ActionBarActivity implements LocationListener
 		mCircleImageView.setImageUrl(me.imageUrl,mImageLoader);
 		if(!TextUtils.isEmpty(me.name)) {
 			mDriverName.setText(me.name);
+		}
+		if(mBusInfo != null) {
+			
 		}
 	}
 	
@@ -434,4 +468,44 @@ private GoogleApiClient buildLocationClient() {
 	}
 	
 
+	public void commitPhoneSale() {
+		mPhoneSalesCount.setText(""+Authorization.incrementPhoneSales());
+	}
+	
+	// This snippet hides the system bars.
+	private void hideSystemUI() {
+	    // Set the IMMERSIVE flag.
+	    // Set the content to appear under the system bars so that the content
+	    // doesn't resize when the system bars hide and show.
+	    getWindow().getDecorView().setSystemUiVisibility(
+	                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	              | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	              | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	              | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+	              | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+	              | View.SYSTEM_UI_FLAG_IMMERSIVE);
+	}
+
+	// This snippet shows the system bars. It does this by removing all the flags
+	// except for the ones that make the content appear under the system bars.
+	private void showSystemUI() {
+		getWindow().getDecorView().setSystemUiVisibility(
+	               View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		// TODO Auto-generated method stub
+		super.onWindowFocusChanged(hasFocus);
+	    if (hasFocus) {
+	        getWindow().getDecorView().setSystemUiVisibility(
+	                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+	                | View.SYSTEM_UI_FLAG_FULLSCREEN
+	                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
+	}
 }

@@ -1,18 +1,35 @@
 package com.tickey.driver.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.google.gson.Gson;
 import com.tickey.driver.R;
+import com.tickey.driver.common.BaseApplication;
+import com.tickey.driver.data.model.User;
+import com.tickey.driver.gcm.GcmPreferences;
+import com.tickey.driver.screens.TicketsScreen;
+import com.tickey.driver.view.custom.CircleNetworkImageView;
+import com.tickey.driver.view.custom.DividerItemDecoration;
 
 public class TicketsMainFragment extends Fragment{
 
-	
+	private CircleNetworkImageView lastBuyerAvatar;
+	private TextView lastBuyerName;
+    private BroadcastReceiver mTicketsBuyingReceiver;
+    private ImageLoader mImageLoader;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -24,10 +41,30 @@ public class TicketsMainFragment extends Fragment{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		
-		View content = inflater.inflate(R.layout.fragment_tickets_main, container, false);
+//		View content = inflater.inflate(R.layout.fragment_tickets_main, container, false);
+		View content = inflater.inflate(R.layout.fragment_tickets_main_new, container, false);
 		
-		final ImageView buyTicketImageView = (ImageView) content.findViewById(R.id.iv_buy_ticket);
-		final TextView buyTicketTextView = (TextView) content.findViewById(R.id.tv_buy_ticket);
+		mImageLoader = BaseApplication.getInstance().getImageLoader();
+
+		lastBuyerAvatar = (CircleNetworkImageView) content.findViewById(R.id.last_buyer_avatar);
+		lastBuyerName = (TextView) content.findViewById(R.id.last_buyer_name);
+		mTicketsBuyingReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// TODO Auto-generated method stub
+				User newUser = new Gson().fromJson(intent.getStringExtra("buyerObject"), User.class);
+				if(newUser != null) {
+					lastBuyerAvatar.setImageUrl(newUser.imageUrl, mImageLoader, true);
+					lastBuyerName.setText(newUser.fullName);
+					((TicketsScreen) (getActivity())).commitPhoneSale();
+//					lastBuyerAvatar.setImageUrl("https://31.media.tumblr.com/avatar_48fd47f91171_128.png", mImageLoader, true);
+//					lastBuyerAvatar.setImageUrl("https://scontent-ams3-1.xx.fbcdn.net/hphotos-xpa1/t31.0-8/1401310_808669665847064_7901199621549789934_o.jpg", mImageLoader, true);
+				}
+			}
+		};
+//		final ImageView buyTicketImageView = (ImageView) content.findViewById(R.id.iv_buy_ticket);
+//		final TextView buyTicketTextView = (TextView) content.findViewById(R.id.tv_buy_ticket);
 		
 //		final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 //		
@@ -82,9 +119,19 @@ public class TicketsMainFragment extends Fragment{
 	}
 
 	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mTicketsBuyingReceiver,
+                new IntentFilter(GcmPreferences.TYPE_TICKET));
+	}
+	
+	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mTicketsBuyingReceiver);
+        super.onPause();
 	}
 
 	
