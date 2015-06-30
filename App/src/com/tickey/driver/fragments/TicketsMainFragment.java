@@ -22,10 +22,11 @@ import com.tickey.driver.gcm.GcmPreferences;
 import com.tickey.driver.screens.TicketsScreen;
 import com.tickey.driver.view.custom.CircleNetworkImageView;
 import com.tickey.driver.view.custom.DividerItemDecoration;
+import com.tickey.driver.view.custom.RoundedImageView;
 
 public class TicketsMainFragment extends Fragment{
 
-	private CircleNetworkImageView lastBuyerAvatar;
+	private RoundedImageView lastBuyerAvatar;
 	private TextView lastBuyerName;
     private BroadcastReceiver mTicketsBuyingReceiver;
     private ImageLoader mImageLoader;
@@ -47,8 +48,12 @@ public class TicketsMainFragment extends Fragment{
 		mImageLoader = BaseApplication.getInstance().getImageLoader();
 		borderView = content.findViewById(R.id.borderView);
 		
-		lastBuyerAvatar = (CircleNetworkImageView) content.findViewById(R.id.last_buyer_avatar);
+		lastBuyerAvatar = (RoundedImageView) content.findViewById(R.id.last_buyer_avatar);
 		lastBuyerName = (TextView) content.findViewById(R.id.last_buyer_name);
+		
+		float density = getActivity().getResources().getDisplayMetrics().density;
+		final float px = 250 * density;
+		
 		mTicketsBuyingReceiver = new BroadcastReceiver() {
 			
 			@Override
@@ -56,7 +61,8 @@ public class TicketsMainFragment extends Fragment{
 				// TODO Auto-generated method stub
 				User newUser = new Gson().fromJson(intent.getStringExtra("buyerObject"), User.class);
 				if(newUser != null) {
-					lastBuyerAvatar.setImageUrl(newUser.imageUrl, mImageLoader, true);
+					
+					lastBuyerAvatar.setImageUrl(newUser.imageUrl + "?width=" + px, mImageLoader);
 					lastBuyerName.setText(newUser.fullName);
 					borderView.setVisibility(View.VISIBLE);
 					((TicketsScreen) (getActivity())).commitPhoneSale();

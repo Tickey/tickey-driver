@@ -24,7 +24,7 @@
         android:gravity="left|center_vertical"
         android:textColor="@color/background_blue"
         android:lines="1"
-        android:text="sss">             
+        android:text="">             
     </TextView>
     
     <ImageView 

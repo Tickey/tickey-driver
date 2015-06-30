@@ -122,7 +122,7 @@ public class Authorization {
 	public void login(Context context, String username, String password,
 			String gcmId, String deviceName, String deviceId) {
 		// TODO provide right url fucking bitch
-		String url = "http://mk.api.tickey.me/v1/auth/login/employee";
+		String url = Urls.LOGIN;
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put(KEY_USERNAME, username);
