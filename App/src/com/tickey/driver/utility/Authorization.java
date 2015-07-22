@@ -1,6 +1,7 @@
 package com.tickey.driver.utility;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,10 +17,13 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.tickey.driver.callback.AuthorizationCallbacks;
 import com.tickey.driver.data.model.Employee;
 import com.tickey.driver.data.model.ServerResponse;
+import com.tickey.driver.data.model.User;
 import com.tickey.driver.network.callback.TickeyError;
 import com.tickey.driver.network.helper.GsonRequest;
 import com.tickey.driver.network.helper.Urls;
@@ -31,6 +35,7 @@ public class Authorization {
 
 	public static final String USER_TOKEN = "token";
 	public static final String PHONE_SALES_COUNT = "phone_sales_count";
+	public static final String BUYERS_FOR_SESSION = "buyers_for_session";
 	public static final String KEY_FB_ACCESS_TOKEN = "access_token";
 	public static final String KEY_AUTH_HEADER = "Authorization";
 	public static final String KEY_USERNAME = "username";
@@ -82,6 +87,7 @@ public class Authorization {
 		mSharedPreferences.edit()
 				.putString(USER_TOKEN, userAuthenticationToken).commit();
 		mSharedPreferences.edit().putInt(PHONE_SALES_COUNT, 0).commit();
+		mSharedPreferences.edit().putString(BUYERS_FOR_SESSION, "").commit();
 	}
 
 	public void facebookLogin(Context context, String accessToken,
@@ -193,6 +199,7 @@ public class Authorization {
 
 		mSharedPreferences.edit().remove(USER_TOKEN).commit();
 		mSharedPreferences.edit().remove(PHONE_SALES_COUNT).commit();
+		mSharedPreferences.edit().remove(BUYERS_FOR_SESSION).commit();
 		userAuthenticationToken = null;
 	}
 
@@ -231,5 +238,49 @@ public class Authorization {
 	
 	public static int getSessionPhoneSales() {
 		return mSharedPreferences.getInt(PHONE_SALES_COUNT, 0);
+	}
+	
+	public static void saveBuyersForSession(User buyer) {
+		ArrayList<User> buyersArrayList;
+		String buyersList = mSharedPreferences.getString(BUYERS_FOR_SESSION, "");
+		Gson gson = new Gson();
+		MyLog.i(TAG, "Buyers list: " +buyersList);
+		if(buyersList == "" || buyersList.equals("")) {
+			buyersArrayList = new ArrayList<User>();
+			buyersArrayList.add(buyer);
+		} else {
+			buyersArrayList = gson.fromJson(buyersList, ArrayList.class);
+			buyersArrayList.add(0, buyer);
+		}
+//		MyLog.i(TAG, "Buyers list: " + gson.toJson(buyersArrayList));
+		mSharedPreferences.edit().putString(BUYERS_FOR_SESSION, gson.toJson(buyersArrayList)).commit();
+		
+	}
+	
+	public static void removeBuyerFromSession(int index) {
+		ArrayList<User> buyersArrayList;
+		String buyersList = mSharedPreferences.getString(BUYERS_FOR_SESSION, "");
+		Gson gson = new Gson();
+		
+		buyersArrayList = gson.fromJson(buyersList, ArrayList.class);
+		
+		if(buyersArrayList != null && buyersArrayList.size() > 0) {
+			buyersArrayList.remove(index);
+			mSharedPreferences.edit().putString(BUYERS_FOR_SESSION, gson.toJson(buyersArrayList)).commit();
+		}
+		
+		
+	}
+	
+	public static ArrayList<User> getBuyerSession() {
+		ArrayList<User> buyersArrayList;
+		String buyersList = mSharedPreferences.getString(BUYERS_FOR_SESSION, "");
+		Gson gson = new Gson();
+		Type userArr =  new TypeToken<ArrayList<User>>() {
+		}.getType();
+		buyersArrayList = gson.fromJson(buyersList, userArr);
+
+		
+		return buyersArrayList;
 	}
 }

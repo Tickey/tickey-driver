@@ -4,13 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -20,8 +21,7 @@ import com.tickey.driver.common.BaseApplication;
 import com.tickey.driver.data.model.User;
 import com.tickey.driver.gcm.GcmPreferences;
 import com.tickey.driver.screens.TicketsScreen;
-import com.tickey.driver.view.custom.CircleNetworkImageView;
-import com.tickey.driver.view.custom.DividerItemDecoration;
+import com.tickey.driver.utility.MyLog;
 import com.tickey.driver.view.custom.RoundedImageView;
 
 public class TicketsMainFragment extends Fragment{
@@ -31,6 +31,7 @@ public class TicketsMainFragment extends Fragment{
     private BroadcastReceiver mTicketsBuyingReceiver;
     private ImageLoader mImageLoader;
     private View borderView;
+    private float px;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -52,7 +53,7 @@ public class TicketsMainFragment extends Fragment{
 		lastBuyerName = (TextView) content.findViewById(R.id.last_buyer_name);
 		
 		float density = getActivity().getResources().getDisplayMetrics().density;
-		final float px = 250 * density;
+		px = 250 * density;
 		
 		mTicketsBuyingReceiver = new BroadcastReceiver() {
 			
@@ -61,7 +62,8 @@ public class TicketsMainFragment extends Fragment{
 				// TODO Auto-generated method stub
 				User newUser = new Gson().fromJson(intent.getStringExtra("buyerObject"), User.class);
 				if(newUser != null) {
-					
+					lastBuyerAvatar.setImageDrawable(null);
+					MyLog.i("", "Image url - " + newUser.imageUrl + "?width=" + px);
 					lastBuyerAvatar.setImageUrl(newUser.imageUrl + "?width=" + px, mImageLoader);
 					lastBuyerName.setText(newUser.fullName);
 					borderView.setVisibility(View.VISIBLE);
@@ -142,6 +144,20 @@ public class TicketsMainFragment extends Fragment{
         super.onPause();
 	}
 
+	public void setAvatar(User user) {
+		if(user != null) {
+			lastBuyerAvatar.setImageUrl(user.imageUrl + "?width=" + px, mImageLoader);
+			lastBuyerName.setText(user.fullName);
+			borderView.setVisibility(View.VISIBLE);
+		} else {
+			
+//			lastBuyerAvatar.setImageUrl("https://bs1.cdn.telerik.com/v1/O2nVwi9maNQ6ULMI/aae07000-0a13-11e5-b7e8-01960c9961db", mImageLoader);
+//			lastBuyerAvatar.setImageDrawable(getActivity().getDrawable(R.drawable.ic_employee_avatar));
+			lastBuyerAvatar.setImageUrl(null, mImageLoader);
+			lastBuyerName.setText("Empty");
+		}
+
+	}
 	
 	
 }

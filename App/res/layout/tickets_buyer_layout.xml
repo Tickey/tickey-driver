@@ -1,38 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>   
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:layout_width="fill_parent"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="horizontal">
+    android:id="@+id/lyt_container"
+    android:background="?android:attr/selectableItemBackground">
 
-   	<com.tickey.driver.view.custom.CircleNetworkImageView
-    	android:id="@+id/niv_buyers_avatar" 
-        android:layout_width="0dp"
-    	android:gravity="center"
-   		android:layout_height="match_parent"
-   		android:layout_weight="0.15"
-   		android:adjustViewBounds="true"
-   		android:layout_gravity="left"/>
+	<LinearLayout
+	    android:id="@+id/buyer_layout" 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="horizontal"
+        android:animateLayoutChanges="true"
+	    android:background="?android:attr/selectableItemBackground">
+	    
+	   	<com.tickey.driver.view.custom.CircleNetworkImageView
+	    	android:id="@+id/niv_buyers_avatar" 
+	        android:layout_width="0dp"
+	    	android:gravity="center"
+	   		android:layout_height="match_parent"
+	   		android:layout_weight="0.15"
+	   		android:adjustViewBounds="true"
+	   		android:layout_gravity="left"/>
+	    
+	    <TextView
+	        android:id="@+id/tv_buyers_name"
+	        android:layout_width="0dp"
+	        android:layout_height="fill_parent"
+	        android:layout_weight="0.5"
+	        android:textSize="20sp"
+	        android:gravity="left|center_vertical"
+	        android:textColor="@color/background_blue"
+	        android:lines="1"
+	        android:text="">             
+	    </TextView>
+	    
+	    <ImageView 
+	        android:layout_width="56dp"
+	        android:layout_height="fill_parent"
+	        android:scaleType="fitXY"
+	        android:src="@drawable/green_check"/>	 
+	           
+	</LinearLayout>
     
-    <TextView
-        android:id="@+id/tv_buyers_name"
-        android:layout_width="0dp"
-        android:layout_height="fill_parent"
-        android:layout_weight="0.5"
-        android:textSize="20sp"
-        android:gravity="left|center_vertical"
-        android:textColor="@color/background_blue"
-        android:lines="1"
-        android:text="">             
-    </TextView>
+    <LinearLayout
+        android:id="@+id/undo_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:paddingLeft="@dimen/list_item_padding_sides"
+        android:paddingRight="@dimen/list_item_padding_sides"
+        android:height="@dimen/list_item_height"
+        android:animateLayoutChanges="true"
+        android:background="?android:selectableItemBackground">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/txt_delete"
+            android:layout_weight="0.5"
+            android:gravity="center_vertical"
+            android:text="DELETE"
+            android:clickable="true"
+            android:hapticFeedbackEnabled="true"
+            android:textColor="@color/background_blue"/>
+
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right|center_vertical"
+            android:id="@+id/txt_undo"
+            android:text="UNDO"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/background_green"/>
+
+        </LinearLayout>    
     
-    <ImageView 
-        android:layout_width="56dp"
-        android:layout_height="fill_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/green_check"/>
-    
-</LinearLayout>
+</FrameLayout>
 
 

@@ -18,6 +18,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -26,7 +27,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request.Method;
 import com.android.volley.Request.Priority;
 import com.android.volley.RequestQueue;
@@ -46,6 +46,8 @@ import com.tickey.driver.R;
 import com.tickey.driver.common.BaseApplication;
 import com.tickey.driver.data.model.Employee;
 import com.tickey.driver.data.model.ServerResponse;
+import com.tickey.driver.fragments.TicketsBuyersFragment;
+import com.tickey.driver.fragments.TicketsMainFragment;
 import com.tickey.driver.network.callback.TickeyError;
 import com.tickey.driver.network.helper.GsonRequest;
 import com.tickey.driver.network.helper.Urls;
@@ -55,7 +57,7 @@ import com.tickey.driver.utility.MyLog;
 import com.tickey.driver.utility.NNAsyncTask;
 import com.tickey.driver.view.custom.CircleNetworkImageView;
 
-public class TicketsScreen extends ActionBarActivity implements
+public class TicketsScreen extends AppCompatActivity implements
 		LocationListener, ConnectionCallbacks, OnConnectionFailedListener {
 
 	private static final String TAG = TicketsScreen.class.getSimpleName();
@@ -90,6 +92,9 @@ public class TicketsScreen extends ActionBarActivity implements
 	private MenuItem mBusInfo;
 	private Handler mHandler;
 	private Runnable actionBarBusInfoAdding;
+	
+	private TicketsMainFragment ticketsMainFragmet;
+	private TicketsBuyersFragment ticketsBuyersFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +103,9 @@ public class TicketsScreen extends ActionBarActivity implements
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		setContentView(R.layout.activity_tickets_screen);
+		
+		
+		
 		hideSystemUI();
 		mRequestQueue = BaseApplication.getInstance().getRequestQueue();
 		mHandler = new Handler();
@@ -465,12 +473,12 @@ public class TicketsScreen extends ActionBarActivity implements
 					}
 				});
 
-		try {
-			MyLog.i(TAG, "" + busLocationUpdateRequest.getHeaders());
-		} catch (AuthFailureError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			MyLog.i(TAG, "" + busLocationUpdateRequest.getHeaders());
+//		} catch (AuthFailureError e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		busLocationUpdateRequest.mContentType = "application/json";
 		busLocationUpdateRequest.setPriority(Priority.NORMAL);
 		mRequestQueue.add(busLocationUpdateRequest);
@@ -526,4 +534,21 @@ public class TicketsScreen extends ActionBarActivity implements
 							| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 		}
 	}
+
+	public TicketsMainFragment getTicketsMainFragmet() {
+		if(ticketsMainFragmet == null) {
+			ticketsMainFragmet = (TicketsMainFragment) getSupportFragmentManager().findFragmentById(R.id.tickets_main_fragment);
+		}
+		return ticketsMainFragmet;
+	}
+
+	public TicketsBuyersFragment getTicketsBuyersFragment() {
+		if(ticketsBuyersFragment == null) {
+			ticketsBuyersFragment = (TicketsBuyersFragment) getSupportFragmentManager().findFragmentById(R.id.tickets_buyers_fragment);
+		}
+		return ticketsBuyersFragment;
+	}
+	
+	
 }
+ 
