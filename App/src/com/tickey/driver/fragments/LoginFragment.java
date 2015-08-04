@@ -37,6 +37,7 @@ import com.tickey.driver.gcm.GcmPreferences;
 import com.tickey.driver.gcm.RegistrationIntentService;
 import com.tickey.driver.screens.LoginScreen;
 import com.tickey.driver.screens.VehicleNumberScreen;
+import com.tickey.driver.screens.VehicleTypeScreen;
 import com.tickey.driver.utility.Authorization;
 import com.tickey.driver.utility.Hardware;
 import com.tickey.driver.utility.MyLog;
@@ -173,8 +174,10 @@ public class LoginFragment extends Fragment{
 
 	private void loggedIn(String json) {
 
+		Class afterLoginActivity = VehicleNumberScreen.class;
+		
 		mNextIntent = new Intent(getActivity().getApplicationContext(),
-				VehicleNumberScreen.class);
+				afterLoginActivity);
 
 		mNextIntent.putExtra(Employee.class.getSimpleName(), json);
 

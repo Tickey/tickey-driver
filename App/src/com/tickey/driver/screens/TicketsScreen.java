@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -549,6 +550,11 @@ public class TicketsScreen extends AppCompatActivity implements
 		return ticketsBuyersFragment;
 	}
 	
-	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		MyLog.i(TAG, event.getX() + " - " + event.getY());
+		return super.onTouchEvent(event);
+	}
 }
  

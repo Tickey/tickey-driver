@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,9 @@ import com.tickey.driver.R;
 import com.tickey.driver.data.model.User;
 import com.tickey.driver.gcm.GcmPreferences;
 import com.tickey.driver.utility.Authorization;
+import com.tickey.driver.utility.MyLog;
 import com.tickey.driver.view.adapter.TicketsBuyersRecycleAdapter;
+import com.tickey.driver.view.adapter.TicketsBuyersRecycleAdapter.OnItemClickListener;
 import com.tickey.driver.view.custom.DividerItemDecoration;
 
 public class TicketsBuyersFragment extends Fragment{
@@ -106,7 +109,17 @@ public class TicketsBuyersFragment extends Fragment{
 
 		
 		mLayoutManager = new LinearLayoutManager(getActivity());
-		mAdapter = new TicketsBuyersRecycleAdapter(getActivity(), mBuyersDataSet);
+		
+		OnItemClickListener onItemTouch = new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(View view, int position) {
+				// TODO Auto-generated method stub
+				MyLog.i(TAG, "Item touchted pos " + position);
+			}
+		};
+		
+		mAdapter = new TicketsBuyersRecycleAdapter(getActivity(), mBuyersDataSet,  onItemTouch);
 		mRecyclerView.setLayoutManager(mLayoutManager);
 		mRecyclerView.setAdapter(mAdapter);
 		
@@ -125,12 +138,21 @@ public class TicketsBuyersFragment extends Fragment{
 			mAdapter.onItemDismiss(viewHolder);
         }
 
-
+        @Override
+		public int getSwipeDirs(RecyclerView recyclerView,
+				ViewHolder viewHolder) {
+        	if(((TicketsBuyersRecycleAdapter.TicketsBuyerViewHolder) viewHolder).undoLayout.getVisibility() == View.VISIBLE) {
+        		return 0; 
+        	}
+			// TODO Auto-generated method stub
+			return super.getSwipeDirs(recyclerView, viewHolder);
+		}
 
 
 		public void onChildDraw(Canvas c, RecyclerView recyclerView,
 								RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
 								boolean isCurrentlyActive) {
+//			MyLog.i(TAG, "onChildDraw");
 			getDefaultUIUtil().onDraw(c, recyclerView,
 					((TicketsBuyersRecycleAdapter.TicketsBuyerViewHolder) viewHolder).buyerLayout, dX, dY,
 					actionState, isCurrentlyActive);

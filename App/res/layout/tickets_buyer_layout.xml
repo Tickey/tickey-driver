@@ -12,6 +12,7 @@
 	    android:layout_height="match_parent"
 	    android:orientation="horizontal"
         android:animateLayoutChanges="true"
+        android:visibility="visible"
 	    android:background="?android:attr/selectableItemBackground">
 	    
 	   	<com.tickey.driver.view.custom.CircleNetworkImageView
@@ -55,29 +56,17 @@
         android:animateLayoutChanges="true"
         android:background="?android:selectableItemBackground">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/txt_delete"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical"
-            android:text="DELETE"
-            android:clickable="true"
-            android:hapticFeedbackEnabled="true"
-            android:textColor="@color/background_blue"/>
-
 
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"          
             android:gravity="right|center_vertical"
             android:id="@+id/txt_undo"
             android:text="UNDO"
             android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:textColor="@color/background_green"/>
 
         </LinearLayout>    
