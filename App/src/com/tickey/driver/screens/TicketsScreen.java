@@ -129,51 +129,7 @@ public class TicketsScreen extends AppCompatActivity implements
 			getMe();
 		}
 
-		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
-				.getDefaultAdapter();
-		if (mBluetoothAdapter != null && !mBluetoothAdapter.isEnabled()) {
-			// Device does not support Bluetooth
-			mBluetoothAdapter.enable();
-		}
 
-		startBeacon = new NNAsyncTask(this, false) {
-
-			@Override
-			public boolean onPostLoad() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public boolean onLoad() {
-				// TODO Auto-generated method stub
-				beacon = new Beacon.Builder()
-						.setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-						.setId2("1").setId3(meEmployee.busAssigned.beaconId)
-						.setTxPower(-75).setManufacturer(0x4C) // Apple. Change
-																// this for
-																// other
-																// beacon
-																// layouts
-						.setDataFields(Arrays.asList(new Long[] { 0l })) // Remove
-																			// this
-																			// for
-																			// beacon
-																			// layouts
-																			// without
-																			// d:
-																			// fields
-						.build();
-
-				// Change the layout below for other beacon types
-				beaconParser = new BeaconParser()
-						.setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-				beaconTransmitter = new BeaconTransmitter(
-						getApplicationContext(), beaconParser);
-				beaconTransmitter.startAdvertising(beacon);
-				return false;
-			}
-		};
 
 		buildGoogleApiClient();
 
@@ -205,7 +161,7 @@ public class TicketsScreen extends AppCompatActivity implements
 			}
 		}.execute();
 
-		startBeacon.execute();
+
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(getString(R.string.log_out_dialog))
@@ -555,6 +511,57 @@ public class TicketsScreen extends AppCompatActivity implements
 		// TODO Auto-generated method stub
 		MyLog.i(TAG, event.getX() + " - " + event.getY());
 		return super.onTouchEvent(event);
+	}
+	
+	public void startBeacon() {
+		
+		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+				.getDefaultAdapter();
+		if (mBluetoothAdapter != null && !mBluetoothAdapter.isEnabled()) {
+			// Device does not support Bluetooth
+			mBluetoothAdapter.enable();
+		}
+
+		startBeacon = new NNAsyncTask(this, false) {
+
+			@Override
+			public boolean onPostLoad() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean onLoad() {
+				// TODO Auto-generated method stub
+				beacon = new Beacon.Builder()
+						.setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
+						.setId2("1").setId3(meEmployee.busAssigned.beaconId)
+						.setTxPower(-75).setManufacturer(0x4C) // Apple. Change
+																// this for
+																// other
+																// beacon
+																// layouts
+						.setDataFields(Arrays.asList(new Long[] { 0l })) // Remove
+																			// this
+																			// for
+																			// beacon
+																			// layouts
+																			// without
+																			// d:
+																			// fields
+						.build();
+
+				// Change the layout below for other beacon types
+				beaconParser = new BeaconParser()
+						.setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+				beaconTransmitter = new BeaconTransmitter(
+						getApplicationContext(), beaconParser);
+				beaconTransmitter.startAdvertising(beacon);
+				return false;
+			}
+		};
+		
+		startBeacon.execute();
 	}
 }
  

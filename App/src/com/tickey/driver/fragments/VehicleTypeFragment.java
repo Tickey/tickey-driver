@@ -1,9 +1,23 @@
 package com.tickey.driver.fragments;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.Identifier;
+import org.altbeacon.beacon.MonitorNotifier;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +30,10 @@ import com.tickey.driver.R;
 import com.tickey.driver.utility.MyLog;
 import com.tickey.driver.view.adapter.VehicleLinesRecycleAdapter;
 
-public class VehicleTypeFragment extends Fragment{
+public class VehicleTypeFragment extends Fragment {
 
+	private static final String TAG = VehicleTypeFragment.class.getSimpleName();
+	
 	private ArrayList<String> lines;
 	private TextView linesTV;
 	
@@ -25,6 +41,11 @@ public class VehicleTypeFragment extends Fragment{
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 	
+    
+    private BeaconManager beaconManager;
+    
+
+    
 	public static VehicleTypeFragment getInstance(ArrayList<String> lines) {
 
 		Bundle args = new Bundle();
@@ -41,6 +62,12 @@ public class VehicleTypeFragment extends Fragment{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		lines = getArguments().getStringArrayList("lines");
+//		MyLog.i(TAG, "app context - " + instance.getPackageName());
+
+//		beaconManager = BeaconManager.getInstanceForApplication(getActivity());
+//		beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+//		beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+//		beaconManager.bind(this);
 	}
 
 
@@ -69,6 +96,8 @@ public class VehicleTypeFragment extends Fragment{
 
 		MyLog.i("", "" + mLayoutManager.getChildAt(0));
 		
+//		MyLog.i(TAG, " mamanger -> " +instance.getPackageManager());
+//		MyLog.i(TAG, " name -> " + instance.getPackageName());
 		
 		return layout;
 	}
@@ -100,5 +129,12 @@ public class VehicleTypeFragment extends Fragment{
 //		        outRect.top = space;
 		  }
 		}
-	
+
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+		
 }

@@ -1,6 +1,7 @@
 package com.tickey.driver.common;
 
 import android.app.Application;
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
@@ -15,6 +16,7 @@ public class BaseApplication extends Application {
 	private static final String TAG = BaseApplication.class.getSimpleName();
 	private RequestQueue mRequestQueue;
 	private ImageLoader mImageLoader;
+	private Context mContext = null;
 
 	private static BaseApplication mInstance;
 
@@ -23,7 +25,7 @@ public class BaseApplication extends Application {
 		super.onCreate();
 		
 		Authorization.initialize(getApplicationContext());
-
+		mContext = getApplicationContext(); 
 		mInstance = this;
 	}
 
@@ -65,4 +67,9 @@ public class BaseApplication extends Application {
 		}
 	}
 
+    public Context getContext() {
+        //  return instance.getApplicationContext();
+        return mContext;
+    }
+	
 }

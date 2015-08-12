@@ -2,11 +2,29 @@ package com.tickey.driver.screens;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.Identifier;
+import org.altbeacon.beacon.MonitorNotifier;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+import org.altbeacon.beacon.startup.BootstrapNotifier;
+import org.altbeacon.beacon.startup.RegionBootstrap;
+
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.RemoteException;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -34,7 +52,7 @@ import com.tickey.driver.view.adapter.VehicleTypeAdapter;
 import com.tickey.driver.view.custom.CircleNetworkImageView;
 import com.tickey.driver.view.custom.SlidingTabLayout;
 
-public class VehicleTypeScreen extends ActionBarActivity{
+public class VehicleTypeScreen extends AppCompatActivity implements BeaconConsumer ,RangeNotifier{ 
 
 	public static final String TAG = VehicleTypeScreen.class.getSimpleName();
 	
@@ -53,14 +71,30 @@ public class VehicleTypeScreen extends ActionBarActivity{
 	private ImageLoader mImageLoader = BaseApplication.getInstance()
 			.getImageLoader();
 	
-
+	private Runnable isBeaconFound;
+	
 	private HashMap<String, ArrayList<String>> linesMap;
 	
+	private Beacon driverBeacon;
+	
+	private BeaconManager mBeaconManager;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_vehicle_type_screen);
+		
+		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+				.getDefaultAdapter();
+		if (mBluetoothAdapter != null && !mBluetoothAdapter.isEnabled()) {
+			// Device does not support Bluetooth
+			mBluetoothAdapter.enable();
+		}
+		mBeaconManager = BeaconManager.getInstanceForApplication(VehicleTypeScreen.this);
+		mBeaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+
+		mBeaconManager.bind(this);
+        Region region = new Region("com.example.myapp.boostrapRegion", null, null, null);
 		
 		mToolbar = (Toolbar) findViewById(R.id.toolbar);
 		if (mToolbar != null) {
@@ -122,6 +156,30 @@ public class VehicleTypeScreen extends ActionBarActivity{
 		mRequestQueue.add(linesRequest);
 		
 		getMe();
+		
+		final ProgressDialog dialog = new ProgressDialog(VehicleTypeScreen.this);
+		dialog.setCancelable(false);
+		dialog.setCanceledOnTouchOutside(false);
+		
+		dialog.setMessage("Waiting for beacon");
+		dialog.show();
+		final Handler mHandler = new Handler();
+		
+		isBeaconFound = new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if(driverBeacon != null) {
+					dialog.cancel();
+					MyLog.i(TAG, "Beacon found");
+				} else {
+					mHandler.postDelayed(isBeaconFound, 1500);
+				}
+			}
+		};
+		
+		mHandler.post(isBeaconFound);
 	}
 	
 	
@@ -212,4 +270,59 @@ public class VehicleTypeScreen extends ActionBarActivity{
 			}
 		};
 	}
+
+
+
+	@Override
+	public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region arg1) {
+		// TODO Auto-generated method stub
+
+	    for (Beacon beacon: beacons) {
+	    	if(beacon != null && driverBeacon == null) {
+		    	driverBeacon = beacon;
+		    	MyLog.i(TAG, "ID 1 - " + beacon.getId1() + " ID 3 - " + beacon.getId3());
+		    	mBeaconManager.unbind(this);
+	    	}
+
+	    }
+	}
+
+
+
+	@Override
+	public void onBeaconServiceConnect() {
+		// TODO Auto-generated method stub
+	    Region region = new Region("myMonitoringUniqueId", null, null, null);
+
+       
+        mBeaconManager.setRangeNotifier(this);
+	    
+        mBeaconManager.setMonitorNotifier(new MonitorNotifier() {
+        @Override
+        public void didEnterRegion(Region region) {
+            MyLog.i(TAG, "I just saw an beacon for the first time!");        
+        }
+
+        @Override
+        public void didExitRegion(Region region) {
+        	MyLog.i(TAG, "I no longer see an beacon");
+        }
+
+        @Override
+            public void didDetermineStateForRegion(int state, Region region) {
+        	MyLog.i(TAG, "I have just switched from seeing/not seeing beacons: "+state);        
+            }
+        });
+	    try {
+	        mBeaconManager.startRangingBeaconsInRegion(region);
+	    } catch (RemoteException e) {
+	        e.printStackTrace();
+	    }
+	    
+	}
+	
+	public Beacon getDriverBeacon() {
+		return this.driverBeacon;
+	}
+
 }

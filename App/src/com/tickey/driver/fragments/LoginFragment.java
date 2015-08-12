@@ -174,7 +174,7 @@ public class LoginFragment extends Fragment{
 
 	private void loggedIn(String json) {
 
-		Class afterLoginActivity = VehicleNumberScreen.class;
+		Class afterLoginActivity = VehicleTypeScreen.class;
 		
 		mNextIntent = new Intent(getActivity().getApplicationContext(),
 				afterLoginActivity);
