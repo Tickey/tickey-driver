@@ -55,7 +55,10 @@ import com.tickey.driver.view.custom.SlidingTabLayout;
 public class VehicleTypeScreen extends AppCompatActivity implements BeaconConsumer ,RangeNotifier{ 
 
 	public static final String TAG = VehicleTypeScreen.class.getSimpleName();
-	
+	 public static final Region REGION_BUS_ONEDOOR = new Region(
+			   "TICKEY Bus One Door",
+			   Identifier.parse("b5e343ee-0a98-11e5-a6c0-1697f925ec7b"), null,
+			   null);
 	private SlidingTabLayout mTabs;
 	private ViewPager mPager;
 	private VehicleTypeAdapter typeAdapter;
@@ -292,7 +295,7 @@ public class VehicleTypeScreen extends AppCompatActivity implements BeaconConsum
 	@Override
 	public void onBeaconServiceConnect() {
 		// TODO Auto-generated method stub
-	    Region region = new Region("myMonitoringUniqueId", null, null, null);
+    	Region region = new Region("myMonitoringUniqueId", null, null, null);
 
        
         mBeaconManager.setRangeNotifier(this);
@@ -314,7 +317,7 @@ public class VehicleTypeScreen extends AppCompatActivity implements BeaconConsum
             }
         });
 	    try {
-	        mBeaconManager.startRangingBeaconsInRegion(region);
+	        mBeaconManager.startRangingBeaconsInRegion(REGION_BUS_ONEDOOR);
 	    } catch (RemoteException e) {
 	        e.printStackTrace();
 	    }
