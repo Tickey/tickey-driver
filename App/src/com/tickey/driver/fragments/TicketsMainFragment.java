@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -51,6 +49,8 @@ public class TicketsMainFragment extends Fragment{
 		
 		lastBuyerAvatar = (RoundedImageView) content.findViewById(R.id.last_buyer_avatar);
 		lastBuyerName = (TextView) content.findViewById(R.id.last_buyer_name);
+
+		lastBuyerAvatar.setDefaultImageResId(R.drawable.ic_employee_avatar);
 		
 		float density = getActivity().getResources().getDisplayMetrics().density;
 		px = 250 * density;
@@ -62,9 +62,10 @@ public class TicketsMainFragment extends Fragment{
 				// TODO Auto-generated method stub
 				User newUser = new Gson().fromJson(intent.getStringExtra("buyerObject"), User.class);
 				if(newUser != null) {
-					lastBuyerAvatar.setImageDrawable(null);
-					MyLog.i("", "Image url - " + newUser.imageUrl + "?width=" + px);
-					lastBuyerAvatar.setImageUrl(newUser.imageUrl + "?width=" + px, mImageLoader);
+					//lastBuyerAvatar.setImageDrawable(null);
+					String imageUrl = newUser.imageUrl + "?width=" + Math.round(px);
+					MyLog.i("", "Image url - " + imageUrl);
+					lastBuyerAvatar.setImageUrl(imageUrl, mImageLoader);
 					lastBuyerName.setText(newUser.fullName);
 					borderView.setVisibility(View.VISIBLE);
 					((TicketsScreen) (getActivity())).commitPhoneSale();
