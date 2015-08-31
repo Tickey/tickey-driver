@@ -13,10 +13,15 @@ import org.altbeacon.beacon.BeaconTransmitter;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,8 +52,10 @@ import com.tickey.driver.R;
 import com.tickey.driver.common.BaseApplication;
 import com.tickey.driver.data.model.Employee;
 import com.tickey.driver.data.model.ServerResponse;
+import com.tickey.driver.data.model.User;
 import com.tickey.driver.fragments.TicketsBuyersFragment;
 import com.tickey.driver.fragments.TicketsMainFragment;
+import com.tickey.driver.gcm.GcmPreferences;
 import com.tickey.driver.network.callback.TickeyError;
 import com.tickey.driver.network.helper.GsonRequest;
 import com.tickey.driver.network.helper.Urls;
@@ -96,16 +103,35 @@ public class TicketsScreen extends AppCompatActivity implements
 	
 	private TicketsMainFragment ticketsMainFragmet;
 	private TicketsBuyersFragment ticketsBuyersFragment;
-
+    private BroadcastReceiver mTicketsBuyingReceiver;
+	
+    private ArrayList<User> usersBufferArr;
+    private boolean isRunning = false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		isRunning = true;
+		usersBufferArr = new ArrayList<User>();
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		setContentView(R.layout.activity_tickets_screen);
 		
-		
+		mTicketsBuyingReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// TODO Auto-generated method stub
+				User newUser = new Gson().fromJson(intent.getStringExtra("buyerObject"), User.class);
+				
+				if(isRunning) {
+					commitBuy(newUser);
+				} else {
+					usersBufferArr.add(newUser);
+				}
+
+			}
+		};
 		
 		hideSystemUI();
 		mRequestQueue = BaseApplication.getInstance().getRequestQueue();
@@ -161,7 +187,8 @@ public class TicketsScreen extends AppCompatActivity implements
 			}
 		}.execute();
 
-
+        LocalBroadcastManager.getInstance(this).registerReceiver(mTicketsBuyingReceiver,
+                new IntentFilter(GcmPreferences.TYPE_TICKET));
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(getString(R.string.log_out_dialog))
@@ -297,6 +324,8 @@ public class TicketsScreen extends AppCompatActivity implements
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
+		MyLog.i(TAG, "Paused");
+		isRunning = false;
 		super.onPause();
 		stopLocationUpdates();
 		if (beaconTransmitter != null) {
@@ -307,6 +336,17 @@ public class TicketsScreen extends AppCompatActivity implements
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
+		MyLog.i(TAG, "Resumed");
+		isRunning = true;
+		if(usersBufferArr != null) {
+			for(User newUser : usersBufferArr) {
+				commitBuy(newUser);
+			}
+			usersBufferArr.clear();
+		}
+		
+
+        
 		super.onResume();
 		if (mGoogleApiClient != null && mGoogleApiClient.isConnected()
 				&& mLocationRequest != null) {
@@ -323,7 +363,13 @@ public class TicketsScreen extends AppCompatActivity implements
 
 		}
 	}
-
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		MyLog.i(TAG, "Destroyed");
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mTicketsBuyingReceiver);
+		super.onDestroy();
+	}
 	private GoogleApiClient buildLocationClient() {
 		if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
 			return mGoogleApiClient;
@@ -562,6 +608,12 @@ public class TicketsScreen extends AppCompatActivity implements
 		};
 		
 		startBeacon.execute();
+	}
+	
+	public void commitBuy(User newUser) {
+		getTicketsMainFragmet().commitBuy(newUser);
+		getTicketsBuyersFragment().commitBuy(newUser);
+		commitPhoneSale();
 	}
 }
  

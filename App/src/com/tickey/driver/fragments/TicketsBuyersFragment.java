@@ -60,20 +60,7 @@ public class TicketsBuyersFragment extends Fragment{
 			
 
 				User newUser = new Gson().fromJson(intent.getStringExtra("buyerObject"), User.class);
-				if(newUser != null) {
-					if(mBuyersDataSet.size() == 0) {
-						mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-						layout.removeAllViews();
-						layout.addView(borderView);
-						layout.addView(mRecyclerView);
-					}
-					mBuyersDataSet.add(0, newUser);
-					Authorization.saveBuyersForSession(newUser);
-					mAdapter.notifyItemInserted(0);
-					
-//					mAdapter.notifyDataSetChanged();
-					mRecyclerView.scrollToPosition(0);
-				}
+
 
 				
 
@@ -216,20 +203,35 @@ public class TicketsBuyersFragment extends Fragment{
 	}
 
 
-
+	public void commitBuy(User newUser) {
+		if(newUser != null) {
+			if(mBuyersDataSet.size() == 0) {
+				mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+				layout.removeAllViews();
+				layout.addView(borderView);
+				layout.addView(mRecyclerView);
+			}
+			mBuyersDataSet.add(0, newUser);
+			Authorization.saveBuyersForSession(newUser);
+			mAdapter.notifyItemInserted(0);
+			
+//			mAdapter.notifyDataSetChanged();
+			mRecyclerView.scrollToPosition(0);
+		}
+	}
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mTicketsBuyingReceiver,
-                new IntentFilter(GcmPreferences.TYPE_TICKET));
+//        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mTicketsBuyingReceiver,
+//                new IntentFilter(GcmPreferences.TYPE_TICKET));
 	}
 	
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mTicketsBuyingReceiver);
+//        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mTicketsBuyingReceiver);
         super.onPause();
 	}
 	
